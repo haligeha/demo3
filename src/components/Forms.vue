@@ -134,6 +134,7 @@
       handleDelete() {
       }
     }
+
   }
 
 </script>
