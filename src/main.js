@@ -6,8 +6,12 @@ import $ from 'jquery'
 import 'assets/js/bootstrap.min.js'
 //import './static/css/bootstrap-theme.min.css'
 import router from './router/router.js'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.config.productionTip = false
+
+Vue.use(ElementUI);
 
 /* eslint-disable no-new */
 new Vue({
