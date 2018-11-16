@@ -67,6 +67,7 @@
      <td><input @click="del(index)" type="button" value="删除"><input @click="add(index)" type="button" value="查看"></td>
        </tr>
      </table>-->
+
    </div>
   </div>
   <!-- /. PAGE WRAPPER  -->
