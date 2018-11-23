@@ -17,19 +17,23 @@
        style="width:98%;left:20px">
        <el-table-column
          label="ID"
-         prop="id">
+         prop="Id">
        </el-table-column>
        <el-table-column
-         label="性别"
-         prop="gender">
+         label="用户名"
+         prop="UserName">
        </el-table-column>
        <el-table-column
-         label="电话"
-         prop="phone">
+         label="登录名"
+         prop="LoginName">
        </el-table-column>
        <el-table-column
-         label="姓名"
-         prop="name">
+         label="登录密码"
+         prop="LoginPwd">
+       </el-table-column>
+       <el-table-column
+         label="角色"
+         prop="Role">
        </el-table-column>
        <el-table-column
          align="right">
@@ -50,6 +54,7 @@
          </template>
        </el-table-column>
      </el-table>
+
     <!-- <table>
        <tr>
          <th>ID</th>
@@ -96,7 +101,7 @@
             address: '上海市普陀区金沙江路 1516 弄'
           }],*/
         tableData:[],
-        getUrl: 'http://10.8.175.229:8100/api/v1/info/allStaff',
+        getUrl: 'http://10.112.17.185:8086/api/v1/info/user',
         search: ''
       }
     },
@@ -111,7 +116,7 @@
           type: "GET",
           dataType: "JSON",
           //  header:"Access-Control-Allow-Origin:  http://10.112.17.185:8100",
-          url: "http://10.112.17.185:8100/api/v1/info/allStaff",
+          url: "http://10.112.17.185:8086/api/v1/info/user",
           success: function (msg) {
             //alert("加载成功");
             //console.log(msg);
