@@ -17,23 +17,23 @@
        style="width:98%;left:20px">
        <el-table-column
          label="ID"
-         prop="Id">
+         prop="travelId">
        </el-table-column>
        <el-table-column
-         label="用户名"
-         prop="UserName">
+         label="日期"
+         prop="Date">
        </el-table-column>
        <el-table-column
-         label="登录名"
-         prop="LoginName">
+         label="请假人"
+         prop="Traveler">
        </el-table-column>
        <el-table-column
-         label="登录密码"
-         prop="LoginPwd">
+         label="原因"
+         prop="Reason">
        </el-table-column>
        <el-table-column
-         label="角色"
-         prop="Role">
+         label="用户ID"
+         prop="UserId">
        </el-table-column>
        <el-table-column
          align="right">
@@ -101,7 +101,7 @@
             address: '上海市普陀区金沙江路 1516 弄'
           }],*/
         tableData:[],
-        getUrl: 'http://10.112.17.185:8086/api/v1/info/user',
+        getUrl: 'http://10.112.17.185:8086/api/v1/info/travel',
         search: ''
       }
     },
@@ -116,7 +116,7 @@
           type: "GET",
           dataType: "JSON",
           //  header:"Access-Control-Allow-Origin:  http://10.112.17.185:8100",
-          url: "http://10.112.17.185:8086/api/v1/info/user",
+          url: "http://10.112.17.185:8086/api/v1/info/travel",
           success: function (msg) {
             //alert("加载成功");
             //console.log(msg);

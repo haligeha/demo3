@@ -48,7 +48,7 @@
             <router-link to="/hello" class="active-menu waves-effect waves-dark"><i class="fa fa-dashboard"></i> 仪表盘</router-link>
           </li>
           <li>
-            <router-link to="/uielement"class="waves-effect waves-dark"><i class="fa fa-desktop"></i> 工作日历</router-link>
+            <router-link to="/uielement"class="waves-effect waves-dark"><i class="fa fa-desktop"></i> 巡检计划</router-link>
           </li>
           <li>
             <router-link to="/chart" class="waves-effect waves-dark"><i class="fa fa-bar-chart-o"></i> 数据分析</router-link>
