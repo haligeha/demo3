@@ -59,7 +59,9 @@
           <li>
             <router-link to="/forms" class="waves-effect waves-dark"><i class="fa fa-table"></i> 应急指挥 </router-link>
           </li>
-
+          <li>
+            <router-link to="/empty" class="waves-effect waves-dark"><i class="fa fa-fw fa-file"></i> 员工信息</router-link>
+          </li>
           <li>
             <a href="#" class="waves-effect waves-dark"><i class="fa fa-sitemap"></i> 预案审批<span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">
@@ -87,9 +89,7 @@
               </li>
             </ul>
           </li>
-          <li>
-            <a href="empty.html" class="waves-effect waves-dark"><i class="fa fa-fw fa-file"></i> 个人信息</a>
-          </li>
+
         </ul>
 
       </div>

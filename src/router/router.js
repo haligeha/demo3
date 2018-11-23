@@ -7,6 +7,7 @@ import Forms from '../components/Forms.vue'
 import Chart from '../components/Chart.vue'
 import Tables from '../components/Tables.vue'
 import UIElement from '../components/UIElement.vue'
+import Empty from '../components/Empty.vue'
 // 要告诉 vue 使用 vueRouter
 Vue.use(VueRouter)
 
@@ -26,6 +27,10 @@ const routes = [
   {
     path: '/tables',
     component: Tables
+  },
+  {
+    path: '/empty',
+    component: Empty
   },
   {
     path: '/uielement',
