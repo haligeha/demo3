@@ -28,8 +28,8 @@
             <router-link to="/uielement"class="waves-effect waves-dark"><i class="fa fa-desktop"></i> 巡检计划</router-link>
           </li>
           <li>
-            <router-link to="/chart" class="waves-effect waves-dark"><i class="fa fa-bar-chart-o"></i> 数据分析</router-link>
-          </li>
+         <!--   <router-link to="/chart" class="waves-effect waves-dark"><i class="fa fa-bar-chart-o"></i> 数据分析</router-link>
+          </li>-->
           <li>
             <router-link to="/tables" class="waves-effect waves-dark"><i class="fa fa-qrcode"></i>入廊作业</router-link>
           </li>
@@ -38,8 +38,8 @@
           </li>
 
           <li>
-            <router-link to="/empty" class="waves-effect waves-dark"><i class="fa fa-fw fa-file"></i> 员工信息</router-link>
-          </li>
+          <!--  <router-link to="/empty" class="waves-effect waves-dark"><i class="fa fa-fw fa-file"></i> 员工信息</router-link>
+          </li>-->
           <li>
             <a href="#" class="waves-effect waves-dark"><i class="fa fa-sitemap"></i> 应急资源<span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">

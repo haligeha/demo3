@@ -230,12 +230,10 @@
           dialogEvaluateVisible:false,
           form:{
             id:undefined,
-            duration:'',
-            date:'',
-            work_number:'',
-            activity_range:'',
-            evaluation:'',
-           // delivery:false
+            startDate:'',
+            endDate:'',
+            UserId:undefined
+
           },
           formLabelWidth:"120px",
           pageInfo:{
@@ -426,7 +424,6 @@
             dataType:"JSON",
             data:dataGet,
             success:function (msg) {
-
               vm.form.id=msg.id;
               vm.form.duration=msg.duration;
               vm.form.date=msg.date;
