@@ -5,7 +5,7 @@
         入廊作业
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#">主页</a></li>
+        <li><a href="/hello">主页</a></li>
         <li><a href="#">入廊作业</a></li>
         <li class="active">数据</li>
       </ol>
@@ -13,73 +13,74 @@
       </div>
 
     <div class="filter-container">
-      <el-select v-model="listQuery.sort" style="width:120px; left:20px" class="filter-item"  @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key"></el-option>
-      </el-select>
-      <el-select v-model="listQuery.activityRange" clearable style="width: 120px;left:10px" class="filter-item">
+
+      <el-select v-model="listQuery.activityRange" clearable style="width: 120px;left:20px" class="filter-item" @change="handleFilterRange">
         <el-option v-for="item in rangeOptions" :key="item.key" :label="item" :value="item"></el-option>
       </el-select>
-      <el-button class="filter-item" type="mini" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+      <el-button class="filter-item" type="mini" icon="el-icon-search" style="margin-left:20px;" @click="handleFilter">搜索</el-button>
       <el-button size="mini" @click="dialogAddVisible=true">添加</el-button>
+
     </div>
 
   <div id="pageBody">
     <el-table
       :data="tableData"
-    style="width:98%;left: 20px;">
-      <el-table-column
-      label="序号"
-      prop="id">
-      </el-table-column>
-      <el-table-column
-        label="工期"
-        prop="duration">
-      </el-table-column>
-      <el-table-column
-        label="创建时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="施工人员数量"
-        prop="work_number">
-      </el-table-column>
-      <el-table-column
-        label="活动范围"
-        prop="activity_range">
-      </el-table-column>
-      <el-table-column
-        label="评价"
-        prop="evaluation">
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        width="300"
-        align="left">
-        <!--<template slot="header" slot-scope="slot">-->
-          <!--<el-button size="mini" @click="dialogAddVisible=true">添加</el-button>-->
-          <!--<el-input-->
-            <!--v-model="search"-->
-            <!--size="mini"-->
-            <!--placeholder="Type to search"/>-->
-        <!--</template>-->
+      :default-sort="{prop:'id',order:'ascending'}"
+      style="width:98%;left: 20px;">
+      <el-table-column label="序号" prop="id" sortable="" width="90%" align="center">
         <template slot-scope="scope">
-          <el-button
-            type="primary"
-            size="mini"
-            @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button
-            size="mini"
-            @click="handleCheck(scope.row)">查看</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.row)">删除</el-button>
-          <el-button
-            size="mini"
-            @click="handleEvaluate(scope.row)">评价</el-button>
+          <span>{{scope.row.id}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="工期" prop="duration" width="70%" align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.duration}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" prop="date" width="160%" align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.date|formatDate}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="施工人员数量" prop="work_number" width="120%" align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.work_number}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="活动范围" prop="activity_range" width="150%" align="center"
+                       :filters="[{ text: '管廊1号', value: '管廊1号' }, { text: '管廊2号', value: '管廊2号' },{text:'管廊3号',value:'管廊3号'}]"
+                       :filter-method="filterRange"
+                       filter-placement="bottom-end">
+        <template slot-scope="scope">
+          <span>{{scope.row.activity_range}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="评价" prop="evaluation" align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.evaluation}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="300" align="center">
+        <template slot-scope="scope">
+          <el-button type="primary" size="mini" @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button size="mini" @click="handleCheck(scope.row)">查看</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button size="mini" @click="handleEvaluate(scope.row)">评价</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <div class="pagination-container" align="right">
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="pageInfo.pageCode"
+      :page-sizes="pageInfo.pageOption"
+      :page-size="pageInfo.pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="pageInfo.totalPage">
+    </el-pagination>
+    </div>
 
     <el-dialog title="添加记录":visible.sync="dialogAddVisible">
       <el-form>
@@ -99,7 +100,7 @@
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogAddVisible=false">取消</el-button>
+        <el-button @click="resetForm(),dialogAddVisible=false">取消</el-button>
         <el-button type="primary" @click="handleAdd">确定</el-button>
       </div>
     </el-dialog>
@@ -107,30 +108,29 @@
     <el-dialog title="查看详细信息":visible.sync="dialogCheckVisible">
       <el-form>
         <el-form-item label="序号":label-width="formLabelWidth">
-          <el-input v-model="form.id" prop="id" disabled="true"></el-input>
+          <el-input v-model="form.id" prop="id" disabled=""></el-input>
         </el-form-item>
         <el-form-item label="工期（天）":label-width="formLabelWidth">
-          <el-input v-model="form.duration" prop="duration" autocomplete="off" disabled="true"></el-input>
+          <el-input v-model="form.duration" prop="duration" autocomplete="off" disabled=""></el-input>
         </el-form-item>
         <el-form-item label="创建时间":label-width="formLabelWidth">
-          <el-input v-model="form.date" prop="date" autocomplete="off" disabled="true"></el-input>
+          <el-date-picker v-model="form.date" type="datetime" value-format="timestamp" disabled=""></el-date-picker>
         </el-form-item>
         <el-form-item label="施工人员数量":label-width="formLabelWidth">
-          <el-input v-model="form.work_number" prop="work_number" autocomplete="off" disabled="true"></el-input>
+          <el-input v-model="form.work_number" prop="work_number" autocomplete="off" disabled=""></el-input>
         </el-form-item>
         <el-form-item label="活动范围":label-width="formLabelWidth">
-          <el-select v-model="form.activity_range" prop="activity_range" placeholder="请选择活动区域" disabled="true">
+          <el-select v-model="form.activity_range" prop="activity_range" placeholder="请选择活动区域" disabled="">
             <el-option label="管廊1号" value="管廊1号"></el-option>
             <el-option label="管廊2号" value="管廊2号"></el-option>
             <el-option label="管廊3号" value="管廊3号"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="评价":label-width="formLabelWidth">
-          <el-input v-model="form.evaluation" prop="evaluation" autocomplete="off" disabled="true"></el-input>
+          <el-input v-model="form.evaluation" prop="evaluation" autocomplete="off" disabled=""></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogCheckVisible=false">取消</el-button>
         <el-button type="primary" @click="handleCheckConfirm()">确定</el-button>
       </div>
     </el-dialog>
@@ -138,13 +138,13 @@
     <el-dialog title="编辑信息":visible.sync="dialogEditVisible">
       <el-form>
         <el-form-item label="序号":label-width="formLabelWidth">
-          <el-input v-model="form.id" prop="id"></el-input>
+          <el-input v-model="form.id" prop="id" disabled=""></el-input>
         </el-form-item>
         <el-form-item label="工期（天）":label-width="formLabelWidth">
           <el-input v-model="form.duration" prop="duration" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="创建时间":label-width="formLabelWidth">
-          <el-input v-model="form.date" prop="date" autocomplete="off"></el-input>
+          <el-date-picker v-model="form.date" type="datetime" value-format="timestamp" disabled=""></el-date-picker>
         </el-form-item>
         <el-form-item label="施工人员数量":label-width="formLabelWidth">
           <el-input v-model="form.work_number" prop="work_number" autocomplete="off"></el-input>
@@ -166,7 +166,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="提示" :visible.sync="dialogDeleteVisible" width="30%">
+    <el-dialog title="提示":visible.sync="dialogDeleteVisible" width="30%">
       <span>确认删除这条记录？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogDeleteVisible=false">取消</el-button>
@@ -185,6 +185,7 @@
         <el-button type="primary" @click="handleEvaluateConfirm()">确定</el-button>
       </span>
     </el-dialog>
+
   </div>
 
 </div>
@@ -193,17 +194,35 @@
 
 <script>
     export default {
+      filters:{
+        formatDate: function (value) {
+          var val = JSON.parse(value)
+          let date = new Date(val);
+          let y = date.getFullYear();
+          let MM = date.getMonth() + 1;
+          MM = MM < 10 ? ('0' + MM) : MM;
+          let d = date.getDate();
+          d = d < 10 ? ('0' + d) : d;
+          let h = date.getHours();
+          h = h < 10 ? ('0' + h) : h;
+          let m = date.getMinutes();
+          m = m < 10 ? ('0' + m) : m;
+          let s = date.getSeconds();
+          s = s < 10 ? ('0' + s) : s;
+          return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
+        }
+      },
       data() {
         return {
           tableData: [],
-          getUrl: 'http://10.112.17.185:8100/api/v1/info/entranceWork',
+         //getUrl: 'http://10.112.17.185:8100/api/v1/info/entranceWork',
           search: '',
           transID:undefined,
           listQuery:{
-            sort:'+id',
-            activityRange:undefined
+            //sort:'+id',
+            activityRange:''
           },
-          sortOptions:[{label:'ID Ascending',key:'+id'},{label:'ID Descending',key:'-id'}],
+          //sortOptions:[{label:'ID Ascending',key:'+id'},{label:'ID Descending',key:'-id'}],
           rangeOptions:['管廊1号','管廊2号','管廊3号'],
           dialogCheckVisible: false,
           dialogAddVisible:false,
@@ -217,27 +236,54 @@
             UserId:undefined
 
           },
-          formLabelWidth:"120px"
+          formLabelWidth:"120px",
+          pageInfo:{
+            pageCode:1,  //当前页
+            pageOption:[3,5,10,20,50,100],   //分页选项
+            pageSize:10,   //每页显示记录数
+            totalPage:100   //总记录数
+          }
         };
       },
       created: function () {
         this.getTableData()
+        this.getTotalPage()
       },
       methods: {
-        getTableData() {
+        getTableData(pageSize,pageCode) {
           var vm = this;
+          var pageData={}
+          pageData.limit=vm.pageInfo.pageSize;
+          pageData.page=vm.pageInfo.pageCode-1;
           $.ajax({
             type: "GET",
             dataType: "JSON",
             //  header:"Access-Control-Allow-Origin:  http://10.112.17.185:8100",
-            url: "http://10.112.17.185:8100/api/v1/info/entranceWork",
+            url: "http://10.112.17.185:8100/api/v1/info/entranceWorkByPage",
+            data:pageData,
             success: function (msg) {
+              console.log("信息获取成功"+msg)
               vm.tableData = msg;
             },
             error: function (err) {
-              alert("加载0000失败");
+              alert("信息获取失败");
             }
           });
+        },
+        getTotalPage(){
+          var vm=this;
+          $.ajax({
+            url:"http://10.112.17.185:8100/api/v1/info/entranceWorkCount",
+            type:"GET",
+            dataType:"JSON",
+            success:function (msg) {
+              console.log("信息总条数获取成功： "+msg+"条记录")
+              vm.pageInfo.totalPage=msg;
+            },
+            error:function (err) {
+              alert("信息总条数获取失败");
+            }
+          })
         },
         resetForm(){
           this.form={
@@ -265,8 +311,9 @@
             dataType:"JSON",
             data:dataPostString,
             success:function(msg){
-              console.log("success");
+              console.log("添加信息发送成功"+msg);
               vm.getTableData();
+              vm.getTotalPage();
               vm.dialogAddVisible=false;
               vm.resetForm();
               /*dialogAddVisible=false,
@@ -277,12 +324,41 @@
               });*/
             },
             error:function (err) {
-              alert("加载0001失败")
+              alert("添加信息发送失败")
             }
           })
 
         },
+        sortChange(){},
         handleFilter(){
+
+        },
+        handleFilterRange(value){
+          console.log(value)
+          var vm=this;
+          var selectRange={};
+          selectRange.range=value;
+
+          $.ajax({
+            url:"http://10.112.17.185:8100/api/v1/info/entranceWorkByRange",
+            type:"GET",
+            contentType:"application/json",
+            dataType:"JSON",
+            data:selectRange,
+            success:function (msg) {
+              console.log("筛选成功"+msg);
+              vm.pageInfo.totalPage=msg.length;
+              vm.pageInfo.pageCode=1;
+              vm.tableData=msg;
+            },
+            error:function (err) {
+              console.log("筛选失败")
+            }
+          })
+        },
+        filterRange(value,row){
+
+          return row.activity_range===value;
 
         },
         handleEdit(row) {
@@ -306,10 +382,10 @@
               vm.form.activity_range=msg.activity_range;
               vm.form.evaluation=msg.evaluation;
               vm.dialogEditVisible=true;
-              console.log("查看编辑信息成功")
+              console.log("查看编辑信息成功："+msg);
             },
             error:function (err) {
-              alert("加载0005失败")
+              alert("编辑信息获取失败")
             }
           })
         },
@@ -326,10 +402,11 @@
             success:function () {
               vm.dialogEditVisible=false;
               vm.getTableData();
-              vm.resetForm()
+              vm.resetForm();
+              console.log("编辑信息确认发送")
             },
             error:function (err) {
-              alert("加载0006失败")
+              alert("编辑信息发送失败")
             }
           })
 
@@ -356,10 +433,10 @@
               vm.form.activity_range=msg.activity_range;
               vm.form.evaluation=msg.evaluation;
               vm.dialogCheckVisible=true;
-              console.log("查看成功");
+              console.log("查看信息成功"+msg);
             },
             error:function (err) {
-              alert("加载0002失败")
+              alert("查看信息失败")
             }
           })
 
@@ -389,10 +466,11 @@
             success:function () {
               vm.dialogDeleteVisible=false;
               vm.getTableData();
+              vm.getTotalPage();
               console.log("删除成功")
             },
             error:function (err) {
-              alert("加载0003失败")
+              alert("删除失败")
             }
 
           })
@@ -414,10 +492,10 @@
               vm.form.id=msg.id;
               vm.form.evaluation=msg.evaluation;
               vm.dialogEvaluateVisible=true;
-              console.log("查看评价成功")
+              console.log("查看评价信息成功"+msg);
             },
             error:function (err) {
-              alert("加载0006失败")
+              alert("查看评价信息失败")
             }
           })
         },
@@ -438,15 +516,34 @@
               vm.dialogEvaluateVisible=false;
               vm.getTableData();
               vm.resetForm()
-              console.log("评价成功")
+              console.log("评价信息发送成功")
             },
             error:function (err) {
-              alert("加载0004失败")
+              alert("评价信息发送失败")
             }
           })
+        },
+        //pageSize改变时触发
+        handleSizeChange(val){
+          this.pageInfo.pageSize=val;
+          this.getTableData(this.pageInfo.pageSize,this.pageInfo.pageCode);
+        },
+        //当前页改变时触发
+        handleCurrentChange(val){
+          this.pageInfo.pageCode=val;
+          this.getTableData(this.pageInfo.pageSize,this.pageInfo.pageCode);
         }
+
       }
+
     }
 
 
 </script>
+
+<style>
+  .pagination-container{
+    background: #fff;
+    padding: 32px 16px;
+  }
+  </style>

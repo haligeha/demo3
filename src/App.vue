@@ -21,29 +21,6 @@
     <nav class="navbar-default navbar-side" role="navigation">
       <div class="sidebar-collapse">
         <ul class="nav" id="main-menu">
-<!--
-          <li>
-            <a class="active-menu waves-effect waves-dark" href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>
-          </li>
-          <li>
-            <a href="ui-elements.html" class="waves-effect waves-dark"><i class="fa fa-desktop"></i> UI Elements</a>
-          </li>
-          <li>
-            <a href="chart.html" class="waves-effect waves-dark"><i class="fa fa-bar-chart-o"></i> Charts</a>
-          </li>
-          <li>
-            <a href="tab-panel.html" class="waves-effect waves-dark"><i class="fa fa-qrcode"></i> Tabs & Panels</a>
-          </li>
-
-          <li>
-            <a href="table.html" class="waves-effect waves-dark"><i class="fa fa-table"></i> Responsive Tables</a>
-          </li>
-          <li>
-            <a href="form.html" class="waves-effect waves-dark"><i class="fa fa-edit"></i> Forms </a>
-          </li>
-
--->
-
           <li>
             <router-link to="/hello" class="active-menu waves-effect waves-dark"><i class="fa fa-dashboard"></i> 仪表盘</router-link>
           </li>
@@ -57,55 +34,55 @@
             <router-link to="/tables" class="waves-effect waves-dark"><i class="fa fa-qrcode"></i>入廊作业</router-link>
           </li>
           <li>
-            <router-link to="/forms" class="waves-effect waves-dark"><i class="fa fa-table"></i> 应急指挥 </router-link>
+            <router-link to="/forms" class="waves-effect waves-dark"><i class="fa fa-table"></i> 应急预案 </router-link>
           </li>
 
           <li>
           <!--  <router-link to="/empty" class="waves-effect waves-dark"><i class="fa fa-fw fa-file"></i> 员工信息</router-link>
           </li>-->
-          <!--<li>
-            <a href="#" class="waves-effect waves-dark"><i class="fa fa-sitemap"></i> 预案审批<span class="fa arrow"></span></a>
+          <li>
+            <a href="#" class="waves-effect waves-dark"><i class="fa fa-sitemap"></i> 应急资源<span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">
               <li>
-                <a href="#">未完成审批</a>
-              </li>
-              <li>
-                <a href="#">已完成审批</a>
-              </li>
-              <li>
-                <a href="#">待审核审批<span class="fa arrow"></span></a>
+                <a href="#">应急救援人员物资数据<span class="fa arrow"></span></a>
                 <ul class="nav nav-third-level">
                   <li>
-                    <a href="#">Third Level Link</a>
+                    <router-link to="/goods">应急救援物资</router-link>
                   </li>
                   <li>
-                    <a href="#">Third Level Link</a>
+                    <router-link to="/equipment">应急救援装备</router-link>
                   </li>
                   <li>
-                    <a href="#">Third Level Link</a>
+                    <router-link to="/rescueTeam">应急救援队伍</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/shelter">应急避难场所</router-link>
+                  </li>
+                </ul>
+
+              </li>
+
+              <li>
+                <a href="#">应急空间信息<span class="fa arrow"></span></a>
+                <ul class="nav nav-third-level">
+                  <li>
+                    <a href="#">专题数据基础信息</a>
+                  </li>
+                  <li>
+                    <a href="#">行政区划空间信息</a>
+                  </li>
+                  <li>
+                    <a href="#">道路地理资源信息</a>
                   </li>
 
                 </ul>
 
               </li>
             </ul>
-          </li>-->
-          <li>
-            <a href="#" class="waves-effect waves-dark"><i class="fa fa-sitemap"></i>预案审批<span class="fa arrow"></span></a>
-            <ul class="nav nav-second-level">
-              <li>
-                <router-link to="/done" class="waves-effect waves-dark"><i class="fa fa-table"></i> 已审批 </router-link>
-              </li>
-              <li>
-                <router-link to="/undone" class="waves-effect waves-dark"><i class="fa fa-table"></i> 未审批 </router-link>
-              </li>
-              <li>
-                <router-link to="/all" class="waves-effect waves-dark"><i class="fa fa-table"></i> 全部审批信息 </router-link>
-              </li>
+          </li>
 
         </ul>
-          </li>
-        </ul>
+
       </div>
 
     </nav>
