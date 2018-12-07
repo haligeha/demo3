@@ -6,7 +6,7 @@
           应急救援物资
         </h1>
         <ol class="breadcrumb">
-          <li><a href="#">主页</a></li>
+          <li><a href="/hello">主页</a></li>
           <li><a href="#">救援物资</a></li>
           <li class="active">数据</li>
         </ol>
@@ -15,6 +15,7 @@
       <div>
         <el-button size="mini" style="margin-left: 20px" @click="resetForm(),dialogAddVisible=true">添加</el-button>
       </div>
+
       <div class="pageBody">
         <el-table
           :data="tableDataSup"
@@ -119,20 +120,34 @@
 
         <el-dialog title="添加记录":visible.sync="dialogAddVisible">
           <el-form>
+            <el-row :gutter="5">
+              <el-col :span="10">
             <el-form-item label="物资名称":label-width="formLabelWidth">
               <el-input v-model="form.name" prop="name"></el-input>
             </el-form-item>
+              </el-col>
+              <el-col :span="10">
             <el-form-item label="物资类别":label-width="formLabelWidth">
               <el-input v-model="form.category" prop="category"></el-input>
             </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="5">
+              <el-col :span="10">
             <el-form-item label="物资数量":label-width="formLabelWidth">
               <el-input v-model="form.quantity" prop="quantity"></el-input>
             </el-form-item>
+              </el-col>
+              <el-col :span="10">
             <el-form-item label="物资型号":label-width="formLabelWidth">
               <el-input v-model="form.model" prop="model"></el-input>
             </el-form-item>
+              </el-col>
+            </el-row>
             <el-form-item label="生产厂家":label-width="formLabelWidth">
+              <el-col :span="8">
               <el-input v-model="form.manufacturer" prop="manufacturer"></el-input>
+              </el-col>
             </el-form-item>
             <el-form-item label="购买日期":label-width="formLabelWidth">
               <el-date-picker v-model="form.purchase_date" type="datetime" placeholder="请选择日期时间" value-format="timestamp">
@@ -167,24 +182,42 @@
 
         <el-dialog title="编辑信息":visible.sync="dialogEditVisible">
           <el-form>
+            <el-row :gutter="5">
+              <el-col :span="10">
             <el-form-item label="序号":label-width="formLabelWidth">
               <el-input v-model="form.supply_id" prop="supply_id" disabled=""></el-input>
             </el-form-item>
+              </el-col>
+              <el-col :span="10">
             <el-form-item label="物资名称":label-width="formLabelWidth">
               <el-input v-model="form.name" prop="name" disabled=""></el-input>
             </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="5">
+              <el-col :span="10">
             <el-form-item label="物资类别":label-width="formLabelWidth">
               <el-input v-model="form.category" prop="category"></el-input>
             </el-form-item>
+              </el-col>
+              <el-col :span="10">
             <el-form-item label="物资数量":label-width="formLabelWidth">
               <el-input v-model="form.quantity" prop="quantity"></el-input>
             </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="5">
+              <el-col :span="10">
             <el-form-item label="物资型号":label-width="formLabelWidth">
               <el-input v-model="form.model" prop="model"></el-input>
             </el-form-item>
+              </el-col>
+              <el-col :span="10">
             <el-form-item label="生产厂家":label-width="formLabelWidth">
               <el-input v-model="form.manufacturer" prop="manufacturer"></el-input>
             </el-form-item>
+              </el-col>
+            </el-row>
             <el-form-item label="购买日期":label-width="formLabelWidth">
               <el-date-picker v-model="form.purchase_date" type="datetime" placeholder="请选择日期时间" value-format="timestamp">
               </el-date-picker>
@@ -254,7 +287,7 @@
         dialogAddVisible:false,
         dialogEditVisible:false,
         dialogDeleteVisible:false,
-        formLabelWidth:"120px",
+        formLabelWidth:"100px",
         transID:undefined,
         form:{
           supply_id:undefined,
@@ -297,27 +330,13 @@
           contentType:"application/json;charset=utf-8",
           data:pageData,
           success:function (msg) {
-            console.log("获取成功")
+            console.log("信息获取成功")
             console.log(msg)
             vm.tableDataSup=msg;
-            // vm.tableDataSup.supply_id=msg.supply_id;
-            // vm.tableDataSup.name=msg.name;
-            // vm.tableDataSup.category=msg.category;
-            // vm.tableDataSup.quantity=msg.quantity;
-            // vm.tableDataSup.model=msg.model;
-            // vm.tableDataSup.purchase_date=msg.purchase_date;
-            // vm.tableDataSup.manufacturer=msg.manufacturer;
-            // vm.tableDataSup.manufacture_date=msg.manufacture_date;
-            // vm.tableDataSup.valid_until=msg.valid_until;
-            // vm.tableDataSup.use_description=msg.use_description;
-            // vm.tableDataSup.performance_description=msg.performance_description;
-            // vm.tableDataSup.affiliation=msg.affiliation;
-            // vm.tableDataSup.location=msg.location;
-
           },
           error:function (err) {
             console.log(err)
-            //alert("0001");
+            alert("信息获取失败");
           }
         })
       },
@@ -328,13 +347,14 @@
           type:"GET",
           dataType:"JSON",
           success:function (msg) {
-            console.log(msg+"条记录")
+            console.log("信息总条数获取成功： "+msg+"条记录")
             vm.pageInfo.totalPage=msg;
           },
           error:function (err) {
-            alert("加载0007失败");
+            alert("信息总条数获取失败");
           }
         })
+
       },
       //pageSize改变时触发
       handleSizeChange(val){
@@ -391,14 +411,14 @@
           dataType:"JSON",
           data:dataAddString,
           success:function () {
-            console.log("success");
+            console.log("添加信息发送成功");
             vm.getTotalPage();
             vm.getTableDataSup();
             vm.dialogAddVisible=false;
             vm.resetForm();
           },
           error:function (err) {
-            alert("0001")
+            alert("添加信息发送失败")
           }
 
         })
@@ -416,11 +436,11 @@
           dataType:"JSON",
           data:dataEdit,
           success:function(msg){
-            console.log(msg);
+            console.log("编辑信息获取成功："+msg);
             vm.dialogEditVisible=true;
             vm.form=msg;
           },error:function (err) {
-            alert("0005")
+            alert("编辑信息获取失败")
           }
         })
         },
@@ -435,12 +455,13 @@
           contentType:"application/json",
           data:editForm,
           success:function () {
+            console.log("编辑信息确认发送")
             vm.dialogEditVisible=false;
             vm.getTableDataSup();
             vm.resetForm()
           },
           error:function (err) {
-            alert("0006")
+            alert("编辑信息发送失败")
           }
         })
       },
@@ -466,7 +487,7 @@
             console.log("删除成功")
           },
           error: function (err) {
-            alert("0003错误")
+            alert("删除失败")
 
           }
         })

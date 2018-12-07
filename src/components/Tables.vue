@@ -5,7 +5,7 @@
         入廊作业
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#">主页</a></li>
+        <li><a href="/hello">主页</a></li>
         <li><a href="#">入廊作业</a></li>
         <li class="active">数据</li>
       </ol>
@@ -108,26 +108,26 @@
     <el-dialog title="查看详细信息":visible.sync="dialogCheckVisible">
       <el-form>
         <el-form-item label="序号":label-width="formLabelWidth">
-          <el-input v-model="form.id" prop="id" disabled="true"></el-input>
+          <el-input v-model="form.id" prop="id" disabled=""></el-input>
         </el-form-item>
         <el-form-item label="工期（天）":label-width="formLabelWidth">
-          <el-input v-model="form.duration" prop="duration" autocomplete="off" disabled="true"></el-input>
+          <el-input v-model="form.duration" prop="duration" autocomplete="off" disabled=""></el-input>
         </el-form-item>
         <el-form-item label="创建时间":label-width="formLabelWidth">
           <el-date-picker v-model="form.date" type="datetime" value-format="timestamp" disabled=""></el-date-picker>
         </el-form-item>
         <el-form-item label="施工人员数量":label-width="formLabelWidth">
-          <el-input v-model="form.work_number" prop="work_number" autocomplete="off" disabled="true"></el-input>
+          <el-input v-model="form.work_number" prop="work_number" autocomplete="off" disabled=""></el-input>
         </el-form-item>
         <el-form-item label="活动范围":label-width="formLabelWidth">
-          <el-select v-model="form.activity_range" prop="activity_range" placeholder="请选择活动区域" disabled="true">
+          <el-select v-model="form.activity_range" prop="activity_range" placeholder="请选择活动区域" disabled="">
             <el-option label="管廊1号" value="管廊1号"></el-option>
             <el-option label="管廊2号" value="管廊2号"></el-option>
             <el-option label="管廊3号" value="管廊3号"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="评价":label-width="formLabelWidth">
-          <el-input v-model="form.evaluation" prop="evaluation" autocomplete="off" disabled="true"></el-input>
+          <el-input v-model="form.evaluation" prop="evaluation" autocomplete="off" disabled=""></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -166,7 +166,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="提示" :visible.sync="dialogDeleteVisible" width="30%">
+    <el-dialog title="提示":visible.sync="dialogDeleteVisible" width="30%">
       <span>确认删除这条记录？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogDeleteVisible=false">取消</el-button>
@@ -185,6 +185,7 @@
         <el-button type="primary" @click="handleEvaluateConfirm()">确定</el-button>
       </span>
     </el-dialog>
+
   </div>
 
 </div>
@@ -261,12 +262,11 @@
             url: "http://10.112.17.185:8100/api/v1/info/entranceWorkByPage",
             data:pageData,
             success: function (msg) {
-              console.log("chenggong")
+              console.log("信息获取成功"+msg)
               vm.tableData = msg;
-              console.log(msg);
             },
             error: function (err) {
-              alert("加载0000失败");
+              alert("信息获取失败");
             }
           });
         },
@@ -277,10 +277,11 @@
             type:"GET",
             dataType:"JSON",
             success:function (msg) {
+              console.log("信息总条数获取成功： "+msg+"条记录")
               vm.pageInfo.totalPage=msg;
             },
             error:function (err) {
-              alert("加载0007失败");
+              alert("信息总条数获取失败");
             }
           })
         },
@@ -310,7 +311,7 @@
             dataType:"JSON",
             data:dataPostString,
             success:function(msg){
-              console.log("success");
+              console.log("添加信息发送成功"+msg);
               vm.getTableData();
               vm.getTotalPage();
               vm.dialogAddVisible=false;
@@ -323,7 +324,7 @@
               });*/
             },
             error:function (err) {
-              alert("加载0001失败")
+              alert("添加信息发送失败")
             }
           })
 
@@ -345,13 +346,13 @@
             dataType:"JSON",
             data:selectRange,
             success:function (msg) {
-              console.log("筛选成功")
-              console.log(msg)
+              console.log("筛选成功"+msg);
               vm.pageInfo.totalPage=msg.length;
+              vm.pageInfo.pageCode=1;
               vm.tableData=msg;
             },
             error:function (err) {
-              console.log("加载0008失败")
+              console.log("筛选失败")
             }
           })
         },
@@ -381,10 +382,10 @@
               vm.form.activity_range=msg.activity_range;
               vm.form.evaluation=msg.evaluation;
               vm.dialogEditVisible=true;
-              console.log("查看编辑信息成功")
+              console.log("查看编辑信息成功："+msg);
             },
             error:function (err) {
-              alert("加载0005失败")
+              alert("编辑信息获取失败")
             }
           })
         },
@@ -401,10 +402,11 @@
             success:function () {
               vm.dialogEditVisible=false;
               vm.getTableData();
-              vm.resetForm()
+              vm.resetForm();
+              console.log("编辑信息确认发送")
             },
             error:function (err) {
-              alert("加载0006失败")
+              alert("编辑信息发送失败")
             }
           })
 
@@ -431,10 +433,10 @@
               vm.form.activity_range=msg.activity_range;
               vm.form.evaluation=msg.evaluation;
               vm.dialogCheckVisible=true;
-              console.log("查看成功");
+              console.log("查看信息成功"+msg);
             },
             error:function (err) {
-              alert("加载0002失败")
+              alert("查看信息失败")
             }
           })
 
@@ -468,7 +470,7 @@
               console.log("删除成功")
             },
             error:function (err) {
-              alert("加载0003失败")
+              alert("删除失败")
             }
 
           })
@@ -490,10 +492,10 @@
               vm.form.id=msg.id;
               vm.form.evaluation=msg.evaluation;
               vm.dialogEvaluateVisible=true;
-              console.log("查看评价成功")
+              console.log("查看评价信息成功"+msg);
             },
             error:function (err) {
-              alert("加载0006失败")
+              alert("查看评价信息失败")
             }
           })
         },
@@ -514,10 +516,10 @@
               vm.dialogEvaluateVisible=false;
               vm.getTableData();
               vm.resetForm()
-              console.log("评价成功")
+              console.log("评价信息发送成功")
             },
             error:function (err) {
-              alert("加载0004失败")
+              alert("评价信息发送失败")
             }
           })
         },
@@ -530,17 +532,6 @@
         handleCurrentChange(val){
           this.pageInfo.pageCode=val;
           this.getTableData(this.pageInfo.pageSize,this.pageInfo.pageCode);
-        },
-        timestampToTime:function (row,column) {
-          var date=new Date(row.date);
-          var Y = date.getFullYear() + '-'
-          var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-'
-          var D = date.getDate() + ' '
-          var h = date.getHours() + ':'
-          var m = date.getMinutes() + ':'
-          var s = date.getSeconds()
-          console.log("timestamp")
-          return Y+M+D+h+m+s
         }
 
       }
