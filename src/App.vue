@@ -78,6 +78,21 @@
                 </ul>
 
               </li>
+              <li>
+
+                <a href="#" class="waves-effect waves-dark"><i class="fa fa-sitemap"></i>预案审批<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                  <li>
+                    <router-link to="/done" class="waves-effect waves-dark"><i class="fa fa-table"></i> 已审批 </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/undone" class="waves-effect waves-dark"><i class="fa fa-table"></i> 未审批 </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/all" class="waves-effect waves-dark"><i class="fa fa-table"></i> 全部审批信息 </router-link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
 

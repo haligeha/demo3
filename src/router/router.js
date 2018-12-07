@@ -10,6 +10,9 @@ import Goods from '../components/Goods.vue'
 import RescueTeam from '../components/RescueTeam.vue'
 import Equipment from '../components/Equipment.vue'
 import Shelter from '../components/Shelter.vue'
+import Undone from '../components/Undone.vue'
+import Done from '../components/Done.vue'
+import All from '../components/All.vue'
 // 要告诉 vue 使用 vueRouter
 Vue.use(VueRouter)
 
@@ -42,6 +45,18 @@ const routes = [
   {
     path: '/rescueTeam',
     component: RescueTeam
+  },
+  {
+    path: '/undone',
+    component: Undone
+  },
+  {
+    path: '/done',
+    component: Done
+  },
+  {
+    path: '/all',
+    component: All
   },
   {
     path: '/shelter',
