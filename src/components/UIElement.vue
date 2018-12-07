@@ -4,11 +4,11 @@
     <div id="page-wrapper" >
       <div class="header">
         <h1 class="page-header">
-          应急预案
+          工作日历
         </h1>
         <ol class="breadcrumb">
-          <li><a href="#">主页</a></li>
-          <li><a href="#">应急预案</a></li>
+          <li><router-link to="/hello"> <a href="#">主页</a></router-link></li>
+          <li><a href="#">工作日历</a></li>
           <li class="active">数据</li>
         </ol>
       </div>
@@ -70,9 +70,8 @@
         </div>
 
         <div class="showEvent">
-          <div class="title">巡检情况     <el-button
-            size="mini"
-            @click=" dialogAddVisible=true">添加</el-button></div>
+          <div class="title">巡检情况</div>
+
           <!--   <div class="name btm">巡检人员姓名：{{event_item.name}}</div>
              <div class="tel btm">联系电话：{{event_item.tel}}</div>
              <div class="gender btm">巡检性别：{{event_item.gender}}</div>
@@ -91,27 +90,32 @@
 
           <div class="item" v-for="event in items">
             序号:{{event.ID}}<br>
-            值班人姓名：{{event.inspeciton_person}}<br>
-            巡检人员姓名：{{event.duty_person}}<br>
-            巡检日期：{{event.create_date}}<br>
+            值班人姓名：{{event.duty_person}}<br>
+            巡检人员姓名：{{event.inspection_person}}<br>
+            巡检日期：{{event.calendar_date}}<br>
             <!--     巡检时间：{{event.calendar_date}}<br>
                  巡检状况：{{event.condition}}<br>
                  巡检总结：{{event.summary}}<br>
                  异常项：{{event.maintance}}<br>-->
-            <br>
+            <div class="buttonstyle">
+              <el-button
+                size="mini"
+                @click="handleEdit(event.ID)">编辑</el-button>
+              <el-button
+                size="mini"
+                @click="handleCheck(event.ID)">查看</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(event.ID)">删除</el-button>
+            </div>
 
-            <el-button
-              size="mini"
-              @click="handleEdit(event.ID)">编辑</el-button>
-            <el-button
-              size="mini"
-              @click="handleCheck(event.ID)">查看</el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(event.ID)">删除</el-button>
           </div>
+
+          <i class="el-icon-circle-plus-outline" size="large" @click="dialogAddVisible=true"></i>
+
         </div>
+
         <!--  <div class="tel btm">联系电话：{{event_item.tel}}</div>-->
 
         <!--  <div class="dsc">巡检情况：
@@ -133,21 +137,34 @@
         <el-dialog title="添加信息":visible.sync="dialogAddVisible">
           <el-form>
             <el-form-item label="值班人":label-width="formLabelWidth">
-              <el-input v-model="form.duty_person" autocomplete="off" ></el-input>
+              <el-input v-model="form.duty_person" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="巡检人员":label-width="formLabelWidth">
               <el-input v-model="form.inspection_person"autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="巡检总况":label-width="formLabelWidth">
+            <!--  <el-form-item label="创建日期":label-width="formLabelWidth">
+              <el-date-picker v-model="form.create_date" type="date" placeholder="选择日期":picker-options="pickerOptions0">
+              </el-date-picker>
+              </el-form-item>-->
+            <!-- <el-form-item label="创建时间":label-width="formLabelWidth">
+               <el-input v-model="form.calendar_date" autocomplete="off"></el-input>-->
+            <!--  <el-time-picker v-model="form.calendar_date" placeholder="任意时间点" value-format="HH:mm" format="HH:mm">
+              </el-time-picker>
+            </el-form-item>-->
+            <el-form-item label="巡检时间" :label-width="formLabelWidth">
+              <el-date-picker v-model="form.calendar_date" type="date" placeholder="选择日期" :picker-options="pickerOptions0">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="巡检总况" :label-width="formLabelWidth">
               <el-input v-model="form.state" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="巡检内容总结":label-width="formLabelWidth">
+            <el-form-item label="巡检内容总结" :label-width="formLabelWidth">
               <el-input v-model="form.summary" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="异常项":label-width="formLabelWidth">
+            <el-form-item label="异常项" :label-width="formLabelWidth">
               <el-input v-model="form.abnormal" autocomplete="off" ></el-input>
             </el-form-item>
-            <el-form-item label="维护信息":label-width="formLabelWidth">
+            <el-form-item label="维护信息" :label-width="formLabelWidth">
               <el-input v-model="form.maintenance" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
@@ -161,18 +178,19 @@
         <el-dialog title="编辑信息":visible.sync="dialogEditVisible">
           <el-form>
             <el-form-item label="序号":label-width="formLabelWidth">
-              <el-input v-model="form.id" prop="id" ></el-input>
+              <el-input v-model="form.id"></el-input>
             </el-form-item>
             <el-form-item label="值班人":label-width="formLabelWidth">
-              <el-input v-model="form.duty_person" autocomplete="off" ></el-input>
+              <el-input v-model="form.duty_person" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="巡检人员":label-width="formLabelWidth">
               <el-input v-model="form.inspection_person"autocomplete="off" ></el-input>
             </el-form-item>
-            <el-form-item label="创建日期":label-width="formLabelWidth">
-              <el-input v-model="form.create_date" autocomplete="off" ></el-input>
+            <el-form-item label="创建日期":label-width="formLabelWidth" disable="true">
+              <el-input v-model="form.create_date" autocomplete="off" >
+              </el-input>
             </el-form-item>
-            <el-form-item label="创建时间":label-width="formLabelWidth">
+            <el-form-item label="巡检时间":label-width="formLabelWidth">
               <el-input v-model="form.calendar_date" autocomplete="off" ></el-input>
             </el-form-item>
             <el-form-item label="巡检总况":label-width="formLabelWidth">
@@ -196,33 +214,63 @@
 
         <!--xiangqing-->
         <el-dialog title="查看详细信息":visible.sync="dialogCheckVisible">
+          <!-- <el-form>
+             <el-form-item label="序号":label-width="formLabelWidth">
+               <el-input v-model="form.id" disabled="true"></el-input>
+             </el-form-item>
+             <el-form-item label="值班人":label-width="formLabelWidth">
+               <el-input v-model="form.duty_person" autocomplete="off" disabled="true" ></el-input>
+             </el-form-item>
+             <el-form-item label="巡检人员":label-width="formLabelWidth">
+               <el-input v-model="form.inspection_person"autocomplete="off" disabled="true"></el-input>
+             </el-form-item>
+             <el-form-item label="创建日期":label-width="formLabelWidth">
+               <el-input v-model="form.create_date" autocomplete="off" disabled="true"></el-input>
+             </el-form-item>
+             <el-form-item label="巡检时间":label-width="formLabelWidth">
+               <el-input v-model="form.calendar_date" autocomplete="off" disabled="true"></el-input>
+             </el-form-item>
+             <el-form-item label="巡检总况":label-width="formLabelWidth">
+               <el-input v-model="form.state" autocomplete="off" disabled="true"></el-input>
+             </el-form-item>
+             <el-form-item label="巡检内容总结":label-width="formLabelWidth">
+               <el-input v-model="form.summary" autocomplete="off" disabled="true"></el-input>
+             </el-form-item>
+             <el-form-item label="异常项":label-width="formLabelWidth">
+               <el-input v-model="form.abnormal" autocomplete="off"  disabled="true"></el-input>
+             </el-form-item>
+             <el-form-item label="维护信息":label-width="formLabelWidth">
+               <el-input v-model="form.maintenance" autocomplete="off" disabled="true"></el-input>
+             </el-form-item>
+           </el-form>-->
           <el-form>
             <el-form-item label="序号":label-width="formLabelWidth">
-              <el-input v-model="form.id" prop="id" disabled="true"></el-input>
+              <el-input v-model="form.id" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="值班人":label-width="formLabelWidth">
-              <el-input v-model="form.duty_person" autocomplete="off" disabled="true" ></el-input>
+              <el-input v-model="form.duty_person" autocomplete="off" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="巡检人员":label-width="formLabelWidth">
-              <el-input v-model="form.inspection_person"autocomplete="off" disabled="true"></el-input>
+              <el-input v-model="form.inspection_person"autocomplete="off" :disabled="true" ></el-input>
             </el-form-item>
             <el-form-item label="创建日期":label-width="formLabelWidth">
-              <el-input v-model="form.create_date" autocomplete="off" disabled="true"></el-input>
+              <el-input v-model="form.create_date" autocomplete="off" :disabled="true">
+              </el-input>
             </el-form-item>
-            <el-form-item label="创建时间":label-width="formLabelWidth">
-              <el-input v-model="form.calendar_date" autocomplete="off" disabled="true"></el-input>
+            <el-form-item label="巡检时间":label-width="formLabelWidth">
+              <el-input v-model="form.calendar_date" autocomplete="off" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="巡检总况":label-width="formLabelWidth">
-              <el-input v-model="form.state" autocomplete="off" disabled="true"></el-input>
+              <el-input v-model="form.state" autocomplete="off" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="巡检内容总结":label-width="formLabelWidth">
-              <el-input v-model="form.summary" autocomplete="off" disabled="true"></el-input>
+              <el-input v-model="form.summary" autocomplete="off" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="异常项":label-width="formLabelWidth">
-              <el-input v-model="form.abnormal" autocomplete="off"  disabled="true"></el-input>
+              <el-input v-model="form.abnormal" autocomplete="off" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="维护信息":label-width="formLabelWidth">
-              <el-input v-model="form.maintenance" autocomplete="off" disabled="true"></el-input>
+              <el-input v-model="form.maintenance" autocomplete="off" :disabled="true"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -296,10 +344,15 @@
           inspection_person: '',
           create_date: '',
           calendar_date: '',
-          //     condition: '',
+          state:'',
           summary: '',
           abnormal: '',
           maintenance: ''
+        },
+        pickerOptions0: {
+          disabledDate(time) {
+            return time.getTime() < Date.now()-8.64e7;
+          }
         },
         formLabelWidth: "120px"
       };
@@ -337,9 +390,9 @@
               var mm = {};
               mm.ID = msg[x].id;
               mm.duty_person = msg[x].duty_person;
-              mm.inspeciton_person = msg[x].inspeciton_person;
-              mm.create_date = TimestampToTime(msg[x].create_date);
-              // mm={ID,duty_person,inspeciton_person,create_date};
+              mm.inspection_person = msg[x].inspection_person;
+              mm.create_date=TimestampToTime(msg[x].create_date)
+              mm.calendar_date = TimestampToTime(msg[x].calendar_date);
               console.log(mm.ID + "idddddd")
               console.log(vm.tempArr[0] + "idddd");
               vm.tempArr.push(mm);
@@ -355,7 +408,6 @@
         });
 
       },
-
       initData: function (cur) {
         //    var leftcount = 0
         var date
@@ -521,7 +573,7 @@
       handleAdd() {
         var vm = this
         this.form.create_date = Math.round(new Date().getTime()/1000).toString();
-        this.form.calendar_date = Math.round(new Date().getTime()/1000).toString();
+        this.form.calendar_date = Math.round(new Date(this.form.calendar_date).getTime()/1000).toString();
         var dataPost = {};
         dataPost.duty_person = this.form.duty_person;
         dataPost.inspection_person = this.form.inspection_person;
@@ -541,10 +593,11 @@
           data: dataPostString,
           success: function (msg) {
             console.log("success");
-            vm.getTempArr();
-            window.location.reload();
             vm.dialogAddVisible = false;
             vm.resetForm();
+            vm.getTempArr();
+            window.location.reload();
+
             /*dialogAddVisible=false,
             vm.tableData=msg;
             this.resetForm();
@@ -559,6 +612,7 @@
 
       },
       resetForm() {
+
         this.form = {
           id: undefined,
           duty_person: '',
@@ -571,7 +625,45 @@
           maintenance:''
         }
       },
-      handleCheck(id){
+      /* handleCheck(id){
+        function Time(create_date) {
+           var date = new Date(create_date * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+           var Y = date.getFullYear() + '-';
+           var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+           var D = date.getDate();
+           return Y + M + D
+         }
+         function Hour(create_date){
+          var date= new Date(create_date*1000);
+           var Y = date.getFullYear() + '-';
+           var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+           var D = date.getDate()+' ';*/
+      /*   function test(h2) {
+           if ( h2< 10) {
+           //  h2 = date.getHours() + ':';
+             console.log("h2<10");
+             h2 = "0" + h2;
+           }
+           else {
+             h2=h2;
+             console.log("h2>10");
+           }
+           return h2;
+         }
+         var h=test(date.getHours())+':';*/
+      //   var h=date.getHours()+':'
+      //    console.log(h+"timehour");
+      //  var h=date.getHours()+':';
+      /*    var m;
+          if(date.getMinutes()<10){
+            m="0"+date.getMinutes();
+          }
+          else{
+            m=date.getMinutes();
+          }*/
+      /*  var m = date.getMinutes();
+         return Y + M + D+h+m;
+        }
         var vm=this;
         this.transID=id;
         var dataGet={};
@@ -587,10 +679,11 @@
             vm.form.id=msg.id;
             vm.form.duty_person=msg.duty_person;
             vm.form.inspection_person=msg.inspection_person;
-            vm.form.create_date=msg.create_date;
-            vm.form.calendar_date=msg.calendar_date;
-            vm.form.summary=msg.summary;
+            vm.form.create_date=Hour(msg.create_date);
+            vm.form.calendar_date=Time(msg.calendar_date)
             vm.form.state=msg.state;
+            vm.form.summary=msg.summary;
+            console.log(msg.summary+"summmmm");
             vm.form.abnormal=msg.abnormal;
             vm.form.maintenance=msg.maintenance;
             vm.dialogCheckVisible=true;
@@ -601,11 +694,104 @@
           }
         })
 
+      },*/
+      handleCheck(id) {
+        function Time(create_date) {
+          var date = new Date(create_date * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+          var Y = date.getFullYear() + '-';
+          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+          var D = date.getDate();
+          return Y + M + D;
+        }
+        function Hour(create_date){
+          var date= new Date(create_date*1000);
+          var Y = date.getFullYear() + '-';
+          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+          var D = date.getDate()+' ';
+          // var h=date.getHours()+':';
+          // var m = date.getMinutes();
+          function test(h2) {
+            if ( h2< 10) {
+              //  h2 = date.getHours() + ':';
+              console.log("h2<10");
+              h2 = "0" + h2;
+            }
+            else {
+              h2=h2;
+              console.log("h2>10");
+            }
+            return h2;
+          }
+          var h=test(date.getHours())+':';
+
+          var m=test(date.getMinutes());
+          return Y + M + D+h+m;
+        }
+        var vm=this;
+        this.transID=id;
+        var dataCheck={}
+        dataCheck.reportId=this.transID;
+        console.log(dataCheck);
+        $.ajax({
+          url:"http://10.112.17.185:8100/api/v1/info/inspectionById",
+          type:"GET",
+          //   contentType:"application/json",
+          dataType:"JSON",
+          data:dataCheck,
+          success:function (msg) {
+            vm.form.id=msg.id;
+            vm.form.duty_person=msg.duty_person;
+            vm.form.inspection_person=msg.inspection_person;
+            vm.form.create_date=Hour(msg.create_date);
+            vm.form.calendar_date=Time(msg.calendar_date);
+            vm.form.state=msg.state;
+            vm.form.summary=msg.summary;
+            vm.form.abnormal=msg.abnormal;
+            vm.form.maintenance=msg.maintenance;
+            vm.dialogCheckVisible=true;
+            console.log("查看信息成功")
+          },
+          error:function (err) {
+            alert("加载0005失败")
+          }
+        })
       },
       handleCheckConfirm(){
         this.dialogCheckVisible=false;
       },
       handleEdit(id) {
+        function Time(create_date) {
+          var date = new Date(create_date * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+          var Y = date.getFullYear() + '-';
+          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+          var D = date.getDate();
+          return Y + M + D;
+        }
+        function Hour(create_date){
+          var date= new Date(create_date*1000);
+          var Y = date.getFullYear() + '-';
+          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+          var D = date.getDate()+' ';
+          // var h=date.getHours()+':';
+          // var m = date.getMinutes();
+          function test(h2) {
+            if ( h2< 10) {
+              //  h2 = date.getHours() + ':';
+              console.log("h2<10");
+              h2 = "0" + h2;
+            }
+            else {
+              h2=h2;
+              console.log("h2>10");
+            }
+            return h2;
+          }
+          var h=test(date.getHours())+':';
+
+          var m=test(date.getMinutes());
+
+          return Y + M + D+h+m;
+        }
         var vm=this;
         this.transID=id;
         var dataEdit={}
@@ -621,11 +807,11 @@
             vm.form.id=msg.id;
             vm.form.duty_person=msg.duty_person;
             vm.form.inspection_person=msg.inspection_person;
-            vm.form.create_date=msg.create_date;
-            vm.form.calendar_date=msg.calendar_date;
+            vm.form.create_date=Hour(msg.create_date);
+            vm.form.calendar_date=Time(msg.calendar_date);
             vm.form.state=msg.state;
-            vm.form.abnormal=msg.abnormal;
             vm.form.summary=msg.summary;
+            vm.form.abnormal=msg.abnormal;
             vm.form.maintenance=msg.maintenance;
             vm.dialogEditVisible=true;
             console.log("查看编辑信息成功")
@@ -637,7 +823,9 @@
       },
       handleEditConfirm(){
         var vm=this;
-        console.log(this.form);
+        this.form.calendar_date = Math.round(new Date(this.form.calendar_date).getTime()/1000).toString();
+        this.form.create_date = Math.round(new Date(this.form.create_date).getTime()/1000).toString();
+        console.log(this.form.calendar_date);
         var dataPost = {};
         dataPost.id = this.form.id;
         dataPost.duty_person = this.form.duty_person;
@@ -649,7 +837,7 @@
         dataPost.abnormal = this.form.abnormal;
         dataPost.maintenance = this.form.maintenance;
         var reportInfo=JSON.stringify(dataPost);
-        console.log(reportInfo)
+        console.log(reportInfo+"sing a song")
         $.ajax({
           url:"http://10.112.17.185:8100/api/v1/info/inspection",
           type:"PUT",
@@ -659,6 +847,7 @@
           success:function () {
             vm.dialogEditVisible=false;
             vm.getTempArr();
+            window.location.reload();
             vm.resetForm()
           },
           error:function (err) {
@@ -699,6 +888,7 @@
 
         })
       }
+
 
     }
   }
@@ -898,7 +1088,28 @@
     border-left:1px solid #ccc;
     background-color:#ffffff;
   }
+  .item{
+    margin-left:10px;
+    padding:50px; width:380px; height:143px;
+    line-height:22px;
+    border: 0.8px solid #bc8f8f;
+    /*background-color: #e0e8f5;*/
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius:15px;
+  }
+  .buttonstyle{
+    margin-top:5px;
+  }
   .title{
     color:#0f0f0f;
+  }
+  .el-icon-circle-plus-outline{
+    font-size:60px;
+    color:#f45246;
+    position: fixed;
+    bottom: 40px;
+    right: 50px;
+
   }
 </style>
