@@ -52,17 +52,12 @@
               <div v-else>
                 <!--今天  同年同月同日-->
                 <!--  <div v-if=" dayobject.eventSign.flag===true" class="active" :class="{error:dayobject.eventSign[0].arrList.error}" @click="showDetail(dayobject)">-->
-                <div v-if="dayobject.eventSign.length>0" class="active" @click="showDetail(dayobject)">
+                <div v-if="dayobject.eventSign.length>0" class="active" @click="show(dayobject)">
                   {{ dayobject.day.getDate() }}
-                  <!--   <div class="showUser">{{dayobject.eventSign.arrList.duty_person}}</div>-->
-                  <!--    <span v-if=" dayobject.eventSign.flag===true" :class="{imp:dayobject.eventSign.arrList.imp}" @click="showDetail(dayobject.eventSign.arrList)" v-show="isShow">
-
-
-                      </span>-->
                 </div>
 
 
-                <div v-else class="normal">{{ dayobject.day.getDate() }}</div>
+                <div v-else class="normal" @click="showNormal(dayobject)">{{ dayobject.day.getDate() }}</div>
               </div>
 
             </li>
@@ -71,106 +66,60 @@
 
         <div class="showEvent">
           <div class="title">巡检情况</div>
-
-          <!--   <div class="name btm">巡检人员姓名：{{event_item.name}}</div>
-             <div class="tel btm">联系电话：{{event_item.tel}}</div>
-             <div class="gender btm">巡检性别：{{event_item.gender}}</div>
-             <div class="time btm">巡检时间：{{event_item.time}}</div>
-             <div class="dsc">巡检情况：
-               <div class="item" v-for="(item, index) in event_item.dsc " :index="index">{{item}}</div>
-             </div>-->
-          <!--  <div class="id btm">序号:{{event_item.ID}}</div>
-            <div class="inspection btm">值班人姓名：{{event_item.inspection_person}}</div>
-            <div class="name btm">巡检人员姓名：{{event_item.duty_person}}</div>
-            <div class="time btm">巡检日期：{{event_item.create_date}}</div>
-            <div class="calendar btm">巡检时间：{{event_item.calendar_date}}</div>
-            <div class="condition btm">巡检状况：{{event_item.condition}}</div>
-            <div class="summary btm">巡检总结：{{event_item.summary}}</div>
-            <div class="abnormal btm">异常项：{{event_item.maintance}}</div>-->
-
           <div class="item" v-for="event in items">
-            序号:{{event.ID}}<br>
+            序号:{{event.id}}<br>
             值班人姓名：{{event.duty_person}}<br>
             巡检人员姓名：{{event.inspection_person}}<br>
-            巡检日期：{{event.calendar_date}}<br>
-            <!--     巡检时间：{{event.calendar_date}}<br>
-                 巡检状况：{{event.condition}}<br>
-                 巡检总结：{{event.summary}}<br>
-                 异常项：{{event.maintance}}<br>-->
+            巡检日期： {{TimestampToTime(event.calendar_date)}}<br>
+
             <div class="buttonstyle">
               <el-button
                 size="mini"
-                @click="handleEdit(event.ID)">编辑</el-button>
+                @click="handleEdit(event.id)">编辑</el-button>
               <el-button
                 size="mini"
-                @click="handleCheck(event.ID)">查看</el-button>
+                @click="handleCheck(event.id)">查看</el-button>
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(event.ID)">删除</el-button>
+                @click="handleDelete(event.id)">删除</el-button>
             </div>
 
           </div>
-
-          <i class="el-icon-circle-plus-outline" size="large" @click="dialogAddVisible=true"></i>
+          <!--   <el-pagination
+               small
+               layout="prev, pager, next"
+               :total="50">
+             </el-pagination>
+             <i class="el-icon-circle-plus" size="large" @click="ialogAddVisible=true"></i>-->
 
         </div>
 
-        <!--  <div class="tel btm">联系电话：{{event_item.tel}}</div>-->
-
-        <!--  <div class="dsc">巡检情况：
-            <div class="item" v-for="(item, index) in event_item.dsc " :index="index">{{item}}</div>
-          </div>-->
-        <!-- <br>
-         <el-button
-           size="mini"
-           @click="handleAdd()">添加</el-button>
-         <el-button
-           size="mini"
-           @click="handleEdit()">编辑</el-button>
-         <el-button
-           size="mini"
-           type="danger"
-           @click="handleDelete()">删除</el-button>-->
-
         <!--tianjia-->
         <el-dialog title="添加信息":visible.sync="dialogAddVisible">
-          <el-form>
-            <el-form-item label="值班人":label-width="formLabelWidth">
+          <el-form ref="form" :rules="rules" :model="form">
+            <el-form-item label="值班人":label-width="formLabelWidth" prop="duty_person">
               <el-input v-model="form.duty_person" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="巡检人员":label-width="formLabelWidth">
+            <el-form-item label="巡检人员":label-width="formLabelWidth" prop="inspection_person">
               <el-input v-model="form.inspection_person"autocomplete="off"></el-input>
             </el-form-item>
-            <!--  <el-form-item label="创建日期":label-width="formLabelWidth">
-              <el-date-picker v-model="form.create_date" type="date" placeholder="选择日期":picker-options="pickerOptions0">
-              </el-date-picker>
-              </el-form-item>-->
-            <!-- <el-form-item label="创建时间":label-width="formLabelWidth">
-               <el-input v-model="form.calendar_date" autocomplete="off"></el-input>-->
-            <!--  <el-time-picker v-model="form.calendar_date" placeholder="任意时间点" value-format="HH:mm" format="HH:mm">
-              </el-time-picker>
-            </el-form-item>-->
-            <el-form-item label="巡检时间" :label-width="formLabelWidth">
-              <el-date-picker v-model="form.calendar_date" type="date" placeholder="选择日期" :picker-options="pickerOptions0">
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="巡检总况" :label-width="formLabelWidth">
+            <el-form-item label="巡检总况" :label-width="formLabelWidth" prop="state">
               <el-input v-model="form.state" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="巡检内容总结" :label-width="formLabelWidth">
+            <el-form-item label="巡检内容总结" :label-width="formLabelWidth" prop="summary">
               <el-input v-model="form.summary" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="异常项" :label-width="formLabelWidth">
+            <el-form-item label="异常项" :label-width="formLabelWidth" prop="abnormal">
               <el-input v-model="form.abnormal" autocomplete="off" ></el-input>
             </el-form-item>
-            <el-form-item label="维护信息" :label-width="formLabelWidth">
+            <el-form-item label="维护信息" :label-width="formLabelWidth" prop="maintenance">
               <el-input v-model="form.maintenance" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogAddVisible=false">取消</el-button>
-            <el-button type="primary" @click="handleAdd">确定</el-button>
+            <el-button type="primary" @click="handleAdd1('form',dayobject)">确定</el-button>
           </div>
         </el-dialog>
 
@@ -178,7 +127,7 @@
         <el-dialog title="编辑信息":visible.sync="dialogEditVisible">
           <el-form>
             <el-form-item label="序号":label-width="formLabelWidth">
-              <el-input v-model="form.id"></el-input>
+              <el-input v-model="form.id" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="值班人":label-width="formLabelWidth">
               <el-input v-model="form.duty_person" autocomplete="off"></el-input>
@@ -214,35 +163,6 @@
 
         <!--xiangqing-->
         <el-dialog title="查看详细信息":visible.sync="dialogCheckVisible">
-          <!-- <el-form>
-             <el-form-item label="序号":label-width="formLabelWidth">
-               <el-input v-model="form.id" disabled="true"></el-input>
-             </el-form-item>
-             <el-form-item label="值班人":label-width="formLabelWidth">
-               <el-input v-model="form.duty_person" autocomplete="off" disabled="true" ></el-input>
-             </el-form-item>
-             <el-form-item label="巡检人员":label-width="formLabelWidth">
-               <el-input v-model="form.inspection_person"autocomplete="off" disabled="true"></el-input>
-             </el-form-item>
-             <el-form-item label="创建日期":label-width="formLabelWidth">
-               <el-input v-model="form.create_date" autocomplete="off" disabled="true"></el-input>
-             </el-form-item>
-             <el-form-item label="巡检时间":label-width="formLabelWidth">
-               <el-input v-model="form.calendar_date" autocomplete="off" disabled="true"></el-input>
-             </el-form-item>
-             <el-form-item label="巡检总况":label-width="formLabelWidth">
-               <el-input v-model="form.state" autocomplete="off" disabled="true"></el-input>
-             </el-form-item>
-             <el-form-item label="巡检内容总结":label-width="formLabelWidth">
-               <el-input v-model="form.summary" autocomplete="off" disabled="true"></el-input>
-             </el-form-item>
-             <el-form-item label="异常项":label-width="formLabelWidth">
-               <el-input v-model="form.abnormal" autocomplete="off"  disabled="true"></el-input>
-             </el-form-item>
-             <el-form-item label="维护信息":label-width="formLabelWidth">
-               <el-input v-model="form.maintenance" autocomplete="off" disabled="true"></el-input>
-             </el-form-item>
-           </el-form>-->
           <el-form>
             <el-form-item label="序号":label-width="formLabelWidth">
               <el-input v-model="form.id" :disabled="true"></el-input>
@@ -278,33 +198,15 @@
             <el-button type="primary" @click="handleCheckConfirm()">确定</el-button>
           </div>
         </el-dialog>
-        <!--  <el-dialog title="添加信息":visible.sync="dialogAddVisible">
-            <el-form>
 
-              <el-form-item label="值班人":label-width="formLabelWidth">
-                <el-input v-model="form.duty_person" prop="duty_person" autocomplete="off" ></el-input>
-              </el-form-item>
-              <el-form-item label="巡检人员":label-width="formLabelWidth">
-                <el-input v-model="form.inspection_person" prop="inspection_person" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="巡检总况":label-width="formLabelWidth">
-                <el-input v-model="form.condition" prop="condition" autocomplete="off" ></el-input>
-              </el-form-item>
-              <el-form-item label="巡检内容总结":label-width="formLabelWidth">
-                <el-input v-model="form.summary" prop="summary" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="异常项":label-width="formLabelWidth">
-                <el-input v-model="form.abnormal" prop="abnormal" autocomplete="off" ></el-input>
-              </el-form-item>
-              <el-form-item label="维护信息":label-width="formLabelWidth">
-                <el-input v-model="form.maintenance" prop="maintenance" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogAddVisible=false">取消</el-button>
-              <el-button type="primary" @click="handleAdd()">确定</el-button>
-            </div>
-          </el-dialog>-->
+        <!--tianjia youshijian-->
+        <el-dialog title="提示" :visible.sync="dialogADDVisible" width="30%">
+          <span>请选择对巡检日记进行查看或添加</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="handleAdd2(dayobject)">添加</el-button>
+            <el-button type="primary" @click="showDetail(GMTToStr(dayobject.day))">查看</el-button>
+         </span>
+        </el-dialog>
         <!--shanchu-->
         <el-dialog title="提示" :visible.sync="dialogDeleteVisible" width="30%">
           <span>确认删除这条记录？</span>
@@ -323,12 +225,19 @@
   export default {
     data() {
       return {
+        rules:{
+          duty_person:[{required:true,message:'负责人不能为空'}],
+          inspection_person:[{required:true,message:"巡检人员不能为空"}],
+        },
+        dialogADDVisible:false,
         dialogAddVisible: false,
         dialogDeleteVisible:false,
         dialogCheckVisible:false,
         dialogEditVisible:false,
         transID:undefined,
+        calendar_date:'',
         tempArr: [],
+        dayobject:{},
         currentDay: 1,
         currentMonth: 1,
         currentYear: 1970,
@@ -349,12 +258,7 @@
           abnormal: '',
           maintenance: ''
         },
-        pickerOptions0: {
-          disabledDate(time) {
-            return time.getTime() < Date.now()-8.64e7;
-          }
-        },
-        formLabelWidth: "120px"
+        formLabelWidth: "100px",
       };
 
 
@@ -362,23 +266,26 @@
 
     created: function () { // 在vue初始化时调用//
       this.getTempArr();
-      //  this.initData()
+
     },
 
     methods: {
+      GMTToStr: function (time) {
+        let date = new Date(time)
+        let Str = date.getFullYear() + '-' +
+          (date.getMonth() + 1) + '-' +
+          date.getDate() + ' '
+        return Str
+      },
+      TimestampToTime:function(create_date) {
+        var date = new Date(create_date * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+        var D = date.getDate();
+        return Y + M + D
+      },
       getTempArr: function () {
         var vm = this;
-
-        //   var mm={ID:undefined,duty_person:"",inspeciton_person:"",create_date:""};
-
-        function TimestampToTime(create_date) {
-          var date = new Date(create_date * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-          var Y = date.getFullYear() + '-';
-          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-          var D = date.getDate();
-          return Y + M + D
-        }
-
         $.ajax({
           type: "GET",
           dataType: "JSON",
@@ -386,18 +293,8 @@
           url: "http://10.112.17.185:8100/api/v1/info/allReport",
           success: function (msg) {
             console.log("hello");
-            for (var x = 0; x < msg.length; x++) {
-              var mm = {};
-              mm.ID = msg[x].id;
-              mm.duty_person = msg[x].duty_person;
-              mm.inspection_person = msg[x].inspection_person;
-              mm.create_date=TimestampToTime(msg[x].create_date)
-              mm.calendar_date = TimestampToTime(msg[x].calendar_date);
-              console.log(mm.ID + "idddddd")
-              console.log(vm.tempArr[0] + "idddd");
-              vm.tempArr.push(mm);
-
-            }
+            vm.tempArr=msg;
+            console.log(vm.tempArr[0].id+"123456");
             //  vm.tempArr.push(mm);
             console.log(1);
             vm.initData(null);
@@ -410,6 +307,7 @@
       },
       initData: function (cur) {
         //    var leftcount = 0
+        console.log(this.tempArr+"44444")
         var date
         if (cur) {
           console.log(cur)
@@ -443,7 +341,6 @@
           var tempTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
           // var tempSign=this.isVerDate(d.getDate());
           var tempSign = this.isVerDate(tempTime)
-          // console.log(tempSign);
           dayobject.eventSign = tempSign
           //   this.days.push(dayobject)// 将日期放入data 中的days数组 供页面渲染使用
           if (tempSign.length > 0) {
@@ -493,26 +390,25 @@
 
         }
       },
-      /*  TimestampToTime:function(timestamp){
-        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        var Y = date.getFullYear() + '-';
-        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        var D = date.getDate() + ' ';
-        return Y + '-' + M + '-' +D
-      },*/
-
 
 
       isVerDate(v) {
-        console.log(2)
-        //  console.log(this.tempArr);
+        console.log(this.tempArr+"3333");
         var tem = new Array();
-        var temp = ''
-
+        var temp = '';
+        function TimestampToTime(create_date) {
+          var date = new Date(create_date * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+          var Y = date.getFullYear() + '-';
+          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+          var D = date.getDate();
+          return Y + M + D
+        };
+        console.log(this.tempArr.length+"1222222222");
         for (var i = 0; i < this.tempArr.length; i++) {
-          console.log(this.tempArr[i].create_date + this.tempArr[i].ID + "this.tempArr[0]");
+          console.log(this.tempArr.length+"1222222222");
+          console.log(this.tempArr[i].calendar_date + "this.tempArr[0]......");
           console.log(v + "this.tempArr[0]");
-          if (this.tempArr[i].create_date === v) {
+          if ( TimestampToTime(this.tempArr[i].calendar_date) === v) {
 
             temp = {flag: true, arrList: this.tempArr[i]}
             console.log("the first time");
@@ -553,27 +449,102 @@
         if (d < 10) d = '0' + d
         return y + '-' + m + '-' + d
       },
+      handleAdd2:function(v){
 
+        var vm=this;
+        vm.dialogAddVisible=true;
+        var day=vm.dayobject.day;
+        var date= Math.round(new Date(day).getTime()/1000).toString();
 
-      // 点击显示该日期的数据
-      showDetail: function (v) {
-        this.items = [];
-        console.log(v)
-        var m = [];
-        //   for(var i=0;i<v.length;i++)this.event_item = v[i];
-        for (var i = 0; i < v.eventSign.length; i++) {
-          m = v.eventSign[i].arrList;
-          //   this.event_item=m;
-          this.items.push(m);
-          console.log(this.items[i].ID + "wawawawawawaawa");
-        }
-        //  this.event_item = v;
+      },
+      handleAdd1:function(formName,dayobject){
+        var vm=this;
+        console.log(vm.dayobject.day+"11111111111");
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            vm.handleAdd(dayobject)
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
 
-      handleAdd() {
+      show:function(m){
+        var vm=this;
+        vm.dialogADDVisible=true;
+        this.dayobject=m;
+        console.log(this.dayobject);
+      },
+
+      showNormal:function(m){
+        var vm=this;
+        vm.dialogAddVisible=true;
+        this.dayobject=m;
+      },
+      // 点击显示该日期的数据
+      /* showDetail: function (v) {
+              var vm=this;
+              this.dialogADDVisible=false;
+            this.items = [];
+            console.log(v)
+            var m = [];
+            //   for(var i=0;i<v.length;i++)this.event_item = v[i];
+            for (var i = 0; i < v.eventSign.length; i++) {
+              m = v.eventSign[i].arrList;
+              //   this.event_item=m;
+              console.log(m.calendar_date+"bengbeng");
+              this.items.push(m);
+            }
+          },*/
+      showDetail:function(v){
+        var vm=this;
+        this.dialogADDVisible=false;
+        this.items=[];
+        /*  function GMTToStr(time) {
+            let date = new Date(time)
+            let Str = date.getFullYear() + '-' +
+              (date.getMonth() + 1) + '-' +
+              date.getDate() + ' '
+            return Str
+          }
+          this.calendar_date=GMTToStr(v)*/
+        this.calendar_date=v;
+        console.log(this.calendar_date+"bengbengbeng ")
+        this.calendar_date=Math.round(new Date(this.calendar_date).getTime()/1000).toString();
+
+        var dataCheck={}
+        dataCheck.calendar_date=this.calendar_date;
+        $.ajax({
+          url:"http://10.112.17.185:8100/api/v1/info/inspectionByCalendarDate",
+          type:"GET",
+          //   contentType:"application/json",
+          dataType:"JSON",
+          data:dataCheck,
+          success:function (msg) {
+            vm.items=msg;
+
+            console.log("查看信息成功")
+          },
+          error:function (err) {
+            alert("加载0005失败")
+          }
+        })
+      },
+
+      handleAdd(dayobject) {
         var vm = this
+
         this.form.create_date = Math.round(new Date().getTime()/1000).toString();
-        this.form.calendar_date = Math.round(new Date(this.form.calendar_date).getTime()/1000).toString();
+        function GMTToStr(time) {
+          let date = new Date(time)
+          let Str = date.getFullYear() + '-' +
+            (date.getMonth() + 1) + '-' +
+            date.getDate() + ' '
+          return Str
+        };
+        var m=GMTToStr(dayobject.day)
+        this.form.calendar_date = Math.round(new Date(m).getTime()/1000).toString();
         var dataPost = {};
         dataPost.duty_person = this.form.duty_person;
         dataPost.inspection_person = this.form.inspection_person;
@@ -596,14 +567,6 @@
             vm.dialogAddVisible = false;
             vm.resetForm();
             vm.getTempArr();
-            window.location.reload();
-
-            /*dialogAddVisible=false,
-            vm.tableData=msg;
-            this.resetForm();
-            this.$nextTick(()=>{
-              this.$refs['dataForm'].clearValidate()
-            });*/
           },
           error: function (err) {
             alert("加载0001失败")
@@ -614,87 +577,14 @@
       resetForm() {
 
         this.form = {
-          id: undefined,
           duty_person: '',
           inspection_person: '',
-          create_date: '',
-          calendar_date: '',
           state:'',
           summary:'',
           abnormal:'',
           maintenance:''
         }
       },
-      /* handleCheck(id){
-        function Time(create_date) {
-           var date = new Date(create_date * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-           var Y = date.getFullYear() + '-';
-           var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-           var D = date.getDate();
-           return Y + M + D
-         }
-         function Hour(create_date){
-          var date= new Date(create_date*1000);
-           var Y = date.getFullYear() + '-';
-           var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-           var D = date.getDate()+' ';*/
-      /*   function test(h2) {
-           if ( h2< 10) {
-           //  h2 = date.getHours() + ':';
-             console.log("h2<10");
-             h2 = "0" + h2;
-           }
-           else {
-             h2=h2;
-             console.log("h2>10");
-           }
-           return h2;
-         }
-         var h=test(date.getHours())+':';*/
-      //   var h=date.getHours()+':'
-      //    console.log(h+"timehour");
-      //  var h=date.getHours()+':';
-      /*    var m;
-          if(date.getMinutes()<10){
-            m="0"+date.getMinutes();
-          }
-          else{
-            m=date.getMinutes();
-          }*/
-      /*  var m = date.getMinutes();
-         return Y + M + D+h+m;
-        }
-        var vm=this;
-        this.transID=id;
-        var dataGet={};
-        dataGet.reportId=this.transID;
-        console.log(dataGet)
-        $.ajax({
-          url:"http://10.112.17.185:8100/api/v1/info/inspectionById",
-          type:"GET",
-          contentType:"application/json;charset=UTF-8",
-          dataType:"JSON",
-          data:dataGet,
-          success:function (msg) {
-            vm.form.id=msg.id;
-            vm.form.duty_person=msg.duty_person;
-            vm.form.inspection_person=msg.inspection_person;
-            vm.form.create_date=Hour(msg.create_date);
-            vm.form.calendar_date=Time(msg.calendar_date)
-            vm.form.state=msg.state;
-            vm.form.summary=msg.summary;
-            console.log(msg.summary+"summmmm");
-            vm.form.abnormal=msg.abnormal;
-            vm.form.maintenance=msg.maintenance;
-            vm.dialogCheckVisible=true;
-            console.log("查看成功");
-          },
-          error:function (err) {
-            alert("加载0002失败")
-          }
-        })
-
-      },*/
       handleCheck(id) {
         function Time(create_date) {
           var date = new Date(create_date * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
@@ -847,7 +737,7 @@
           success:function () {
             vm.dialogEditVisible=false;
             vm.getTempArr();
-            window.location.reload();
+
             vm.resetForm()
           },
           error:function (err) {
@@ -858,18 +748,43 @@
 
       },
       handleDelete(id) {
+        function Time(create_date) {
+          var date = new Date(create_date * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+          var Y = date.getFullYear() + '-';
+          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+          var D = date.getDate();
+          return Y + M + D;
+        }
         var vm=this;
         this.dialogDeleteVisible=true
 
         this.transID=id;
+        var dataEdit={}
+        dataEdit.reportId=this.transID;
+        console.log(dataEdit);
+        $.ajax({
+          url:"http://10.112.17.185:8100/api/v1/info/inspectionById",
+          type:"GET",
+          //   contentType:"application/json",
+          dataType:"JSON",
+          data:dataEdit,
+          success:function (msg) {
 
-        console.log(this.transID)
+            vm.calendar_date=Time(msg.calendar_date);
+            console.log("查看删除信息日期成功")
+          },
+          error:function (err) {
+            alert("加载0007失败")
+          }
+        })
+        console.log(this.calendar_date)
       },
       handleDeleteConfirm(){
         var vm=this;
         var dataDelete={}
         dataDelete.inspectionId=this.transID;
-        console.log(dataDelete)
+        console.log(this.calendar_date+"mmmaaaa")
+        var p=this.calendar_date;
         $.ajax({
           url:"http://10.112.17.185:8100/api/v1/info/inspectionId?inspectionId="+dataDelete.inspectionId,
           type:"DELETE",
@@ -879,14 +794,17 @@
           success:function () {
             vm.dialogDeleteVisible=false;
             vm.getTempArr();
-            window.location.reload();
+
             console.log("删除成功")
           },
+
           error:function (err) {
             alert("加载0003失败")
           }
 
         })
+        console.log(p+"maya");
+        vm.showDetail(p);
       }
 
 
@@ -1104,7 +1022,7 @@
   .title{
     color:#0f0f0f;
   }
-  .el-icon-circle-plus-outline{
+  .el-icon-circle-plus{
     font-size:60px;
     color:#f45246;
     position: fixed;
