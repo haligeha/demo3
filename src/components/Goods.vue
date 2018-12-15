@@ -106,7 +106,7 @@
           </el-table-column>
         </el-table>
 
-        <div class="pagination-container" align="right">
+        <div class="pagination-container" align="right" style="margin-left:20px;margin-right: 4px">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"

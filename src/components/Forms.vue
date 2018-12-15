@@ -102,7 +102,7 @@
      </el-table>
 
 
-     <div class="pagination-container" align="right">
+     <div class="pagination-container" align="right" style="margin-left:20px;margin-right: 4px">
        <el-pagination
          @size-change="handleSizeChange"
          @current-change="handleCurrentChange"
@@ -149,16 +149,32 @@
          <el-form-item label="预案内容":label-width="formLabelWidth">
            <el-upload class="upload-demo"
                       style="display:inline-block"
-                       action="http://10.112.17.185:8100/api/v1/info/upload"
+                      accept=".pdf,.doc"
+                      action="http://10.112.17.185:8100/api/v1/info/upload"
+                      multiple=""
+                      limit="1"
                       :on-preview="handlePreview"
                       :before-remove="beforeRemove"
                       :on-remove="handleRemove"
                       :on-exceed="handleExceed"
                       :file-list="fileList">
-             <!--<el-button slot="trigger" size="small" type="primary" plain="">点我上传</el-button>-->
-             <div slot="tip" class="el-upload__tip">请上传图片格式文件</div>
+             <el-button slot="trigger" size="small" type="primary" plain="">点我上传</el-button>
+             <div slot="tip" class="el-upload__tip">请上传文件（上限1个）</div>
            </el-upload>
          </el-form-item>
+           </el-col>
+           <el-col :span="10">
+             <el-form-item label="相关附件":label-width="formLabelWidth">
+               <el-upload action="http://10.112.17.185:8100/api/v1/info/upload"
+                          accept=".pdf,.doc"
+                          multiple=""
+                          :limit="3"
+                          :on-exceed="handleExceed"
+                          :file-list="attachList">
+                 <el-button size="small" type="primary">点击上传</el-button>
+                 <div slot="tip" class="el-upload__tip">请上传附件（上限3个）</div>
+               </el-upload>
+             </el-form-item>
            </el-col>
          </el-row>
          <el-row :gutter="5">
@@ -190,11 +206,6 @@
            <el-col :span="10">
          <el-form-item label="签发人":label-width="formLabelWidth">
            <el-input v-model="form.signer" prop="signer"></el-input>
-         </el-form-item>
-           </el-col>
-           <el-col :span="10">
-         <el-form-item label="相关附件":label-width="formLabelWidth">
-           <el-input v-model="form.file" prop="file"></el-input>
          </el-form-item>
            </el-col>
          </el-row>
@@ -268,7 +279,8 @@
           pageSize: 10,     //每页显示记录数
           totalPage: 100  //总记录数
         },
-        fileList:[]
+        fileList:[],
+        attachList:[]
 
       }
     },

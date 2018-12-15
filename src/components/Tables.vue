@@ -14,11 +14,11 @@
 
     <div class="filter-container">
 
-      <el-select v-model="listQuery.activityRange" clearable style="width: 120px;left:20px" class="filter-item" @change="handleFilterRange">
+      <el-select v-model="listQuery.activityRange" clearable style="width: 120px;left:20px" class="filter-item" @change="resetPageInfo(),handleFilterRange()">
         <el-option v-for="item in rangeOptions" :key="item.key" :label="item" :value="item"></el-option>
       </el-select>
-      <el-button class="filter-item" type="mini" icon="el-icon-search" style="margin-left:20px;" @click="handleFilter">搜索</el-button>
-      <el-button size="mini" @click="dialogAddVisible=true">添加</el-button>
+      <!--<el-button class="filter-item" type="mini" icon="el-icon-search" style="margin-left:20px;" @click="handleFilter">搜索</el-button>-->
+      <el-button size="mini" style="margin-left: 40px" @click="dialogAddVisible=true">添加</el-button>
 
     </div>
 
@@ -70,7 +70,7 @@
       </el-table-column>
     </el-table>
 
-    <div class="pagination-container" align="right">
+    <div class="pagination-container" align="right" style="margin-left:20px;margin-right: 4px">
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -294,6 +294,14 @@
             evaluation:''
           }
         },
+        resetPageInfo(){
+          this.pageInfo={
+            pageCode:1,  //当前页
+            pageOption:[3,5,10,20,50,100],   //分页选项
+            pageSize:10,   //每页显示记录数
+            totalPage:100   //总记录数
+          }
+        },
         handleAdd(){
           var vm=this
           this.form.date=new Date().getTime();
@@ -333,26 +341,53 @@
         handleFilter(){
 
         },
-        handleFilterRange(value){
-          console.log(value)
-          var vm=this;
-          var selectRange={};
-          selectRange.range=value;
+        handleFilterRange(activityRange,pageSize,pageCode) {
+          var vm = this;
+          console.log(this.listQuery.activityRange);
 
+          if (this.listQuery.activityRange == '') {
+              vm.getTotalPage();
+              vm.getTableData();
+          } else {
+            vm.countFilterRange();
+            var selectRange = {};
+            selectRange.range = vm.listQuery.activityRange;
+            selectRange.limit=vm.pageInfo.pageSize;
+            selectRange.page=vm.pageInfo.pageCode-1;
+            $.ajax({
+              url: "http://10.112.17.185:8100/api/v1/info/entranceWorkByRange",
+              type: "GET",
+              contentType: "application/json",
+              dataType: "JSON",
+              data: selectRange,
+              success: function (msg) {
+                console.log("筛选成功" + msg);
+
+                // vm.pageInfo.totalPage = msg.length;
+                // vm.pageInfo.pageCode = 1;
+                vm.tableData = msg;
+              },
+              error: function (err) {
+                console.log("筛选失败")
+              }
+            })
+          }
+        },
+        countFilterRange(){
+          var vm=this;
+          var filteredData={};
+          filteredData.range=this.listQuery.activityRange
           $.ajax({
-            url:"http://10.112.17.185:8100/api/v1/info/entranceWorkByRange",
+            url:"http://10.112.17.185:8100/api/v1/info/workCountByRange",
             type:"GET",
-            contentType:"application/json",
             dataType:"JSON",
-            data:selectRange,
+            data:filteredData,
             success:function (msg) {
-              console.log("筛选成功"+msg);
-              vm.pageInfo.totalPage=msg.length;
-              vm.pageInfo.pageCode=1;
-              vm.tableData=msg;
+              console.log("筛选后信息总条数获取成功： "+msg+"条记录")
+              vm.pageInfo.totalPage=msg;
             },
             error:function (err) {
-              console.log("筛选失败")
+              alert("信息总条数获取失败");
             }
           })
         },
@@ -526,12 +561,20 @@
         //pageSize改变时触发
         handleSizeChange(val){
           this.pageInfo.pageSize=val;
-          this.getTableData(this.pageInfo.pageSize,this.pageInfo.pageCode);
+          if(this.listQuery.activityRange=='') {
+            this.getTableData(this.pageInfo.pageSize, this.pageInfo.pageCode);
+          }else{
+            this.handleFilterRange(this.listQuery.activityRange,this.pageInfo.pageSize,this.pageInfo.pageCode)
+          }
         },
         //当前页改变时触发
         handleCurrentChange(val){
           this.pageInfo.pageCode=val;
-          this.getTableData(this.pageInfo.pageSize,this.pageInfo.pageCode);
+          if(this.listQuery.activityRange=='') {
+            this.getTableData(this.pageInfo.pageSize, this.pageInfo.pageCode);
+          }else{
+            this.handleFilterRange(this.listQuery.activityRange,this.pageInfo.pageSize,this.pageInfo.pageCode);
+          }
         }
 
       }
