@@ -22,7 +22,7 @@
       <div class="sidebar-collapse">
         <ul class="nav" id="main-menu">
           <li>
-            <router-link to="/hello" class="active-menu waves-effect waves-dark"><i class="fa fa-dashboard"></i> 仪表盘</router-link>
+            <router-link to="/hello" class="active-menu waves-effect waves-dark"><i class="fa fa-dashboard"></i> 视频</router-link>
           </li>
           <li>
             <router-link to="/uielement"class="waves-effect waves-dark"><i class="fa fa-desktop"></i> 巡检计划</router-link>
